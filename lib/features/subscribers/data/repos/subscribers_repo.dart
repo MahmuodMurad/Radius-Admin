@@ -212,7 +212,7 @@ class SubscribersRepo {
       );
 
       print('balance added');
-      return response['message'];
+      return response['status'];
     } on ServerExceptions catch (e) {
       print(e);
 

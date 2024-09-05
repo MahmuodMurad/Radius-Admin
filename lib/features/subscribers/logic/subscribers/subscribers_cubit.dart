@@ -53,6 +53,7 @@ class SubscribersCubit extends Cubit<SubscribersState> {
       allSubscribers = response;
       emit(AllSubscribersSuccess());
     } catch (e) {
+      print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$e");
       emit(AllSubscribersFailure(error: e.toString()));
     }
   }
@@ -63,6 +64,7 @@ class SubscribersCubit extends Cubit<SubscribersState> {
       hostSubscribers = response;
       emit(HostSubscribersSuccess());
     } catch (e) {
+      print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww$e");
       emit(HostSubscribersFailure(error: e.toString()));
     }
   }
@@ -86,6 +88,7 @@ class SubscribersCubit extends Cubit<SubscribersState> {
       emit(ServerGroupsFailure(error: e.toString()));
     }
   }
+
   Future<void> getUserGroups() async {
     try {
       final response = await _subscribersRepo.getUserGroups();
@@ -95,6 +98,7 @@ class SubscribersCubit extends Cubit<SubscribersState> {
       emit(UserGroupsFailure(error: e.toString()));
     }
   }
+
   Future<void> addSubscribers(
       {required String clientName,
       required String family,
@@ -109,10 +113,10 @@ class SubscribersCubit extends Cubit<SubscribersState> {
       required String serverId,
       required String userGroup,
       required String note,
-        required String allowRecieveNotifications,
-        required String allowSelfPassChange,
-        required String allowUserPanel,
-        required String allowUserSms,
+      required String allowRecieveNotifications,
+      required String allowSelfPassChange,
+      required String allowUserPanel,
+      required String allowUserSms,
       required BuildContext context}) async {
     emit(AddSubscribersLoading());
     try {
@@ -123,7 +127,7 @@ class SubscribersCubit extends Cubit<SubscribersState> {
         password: password,
         mobile: mobile,
         pin: pin,
-        srvType: srvType,
+        srvType: (int.parse(srvType) + 1).toString(),
         afterExp: afterExp,
         afterQoutaEnd: afterQoutaEnd,
         postCredit: postCredit,
@@ -195,24 +199,17 @@ class SubscribersCubit extends Cubit<SubscribersState> {
 
   Future<void> addBalance(
       {required String userName,
-      required BuildContext context,
-      required String amount}) async {
-    emit(DeleteSubscribersLoading());
+        required BuildContext context,
+        required String amount}) async {
+    emit(AddBalanceLoading());
     try {
-      final response =
-          await _subscribersRepo.addBalance(userName: userName, amount: amount);
-      toast(text: "تم اضافه مبلغ $amount ل $userName بنجاح", color: Colors.green);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text("تم اضافه مبلغ $amount ل $userName بنجاح"),
-            backgroundColor: Colors.green),
-      );
-      print("شييBalanse for $userName");
-      emit(DeleteSubscribersSuccess());
+      await _subscribersRepo.addBalance(userName: userName, amount: amount);
+      emit(AddBalanceSuccess());
     } catch (e) {
-      emit(DeleteSubscribersFailure(error: e.toString()));
+      emit(AddBalanceFailure(error: e.toString()));
     }
   }
+
 
   Future<void> renewSubscribtion(
       {required String userName,

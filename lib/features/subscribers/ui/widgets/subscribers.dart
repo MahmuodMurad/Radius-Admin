@@ -7,6 +7,7 @@ import 'package:redius_admin/features/subscribers/logic/offers/offers_cubit.dart
 import 'package:redius_admin/features/subscribers/logic/offers/offers_state.dart';
 import 'package:redius_admin/features/subscribers/logic/subscribers/subscribers_cubit.dart';
 import 'package:redius_admin/features/subscribers/logic/subscribers/subscribers_state.dart';
+import 'package:redius_admin/features/subscribers/ui/widgets/add_balance.dart';
 
 class MyCustomWidget extends StatefulWidget {
   const MyCustomWidget({
@@ -28,9 +29,7 @@ final BuildContext ctx;
 
 class MyCustomWidgetState extends State<MyCustomWidget> {
   bool _isExpanded = false;
-  bool _isAddingBalance = false;
 
-  final TextEditingController _balanceController = TextEditingController();
 
   String _calculateRemainingQuota(String quota, String used) {
     try {
@@ -82,7 +81,7 @@ class MyCustomWidgetState extends State<MyCustomWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.subscriber.fullname,
+                        widget.subscriber.fullname!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 16.sp,
@@ -99,7 +98,7 @@ class MyCustomWidgetState extends State<MyCustomWidget> {
                   ),
                   CircleAvatar(
                     radius: 20.0.w,
-                    backgroundColor: widget.subscriber.onlineStatus ? Colors.green : Colors.red,
+                    backgroundColor: widget.subscriber.onlineStatus! ? Colors.green : Colors.red,
                   ),
                 ],
               ),
@@ -111,10 +110,15 @@ class MyCustomWidgetState extends State<MyCustomWidget> {
                     children: [
                       const Icon(Icons.category_outlined, color: AppColors.accent),
                       SizedBox(width: 8.w),
-                      Text(
-                        widget.subscriber.currentPlan,
-                        style: TextStyle(
-                            fontSize: 16.sp, color: AppColors.secondaryText),
+                      SizedBox(
+                        width: 210.w,
+                        child: Text(
+                          widget.subscriber.currentPlan??"لايوجد",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 16.sp, color: AppColors.secondaryText),
+                        ),
                       ),
                       SizedBox(width: 70.w),
                       // const Icon(Icons.monetization_on_outlined, color: AppColors.accent),
@@ -136,14 +140,192 @@ class MyCustomWidgetState extends State<MyCustomWidget> {
                 height: _isExpanded ? null : 0, // Adjust the height based on the state
                 child: Column(
                   children: [
-                    buildInfoRow("البيانات المتبقية", _calculateRemainingQuota(widget.subscriber.totalQuota, widget.subscriber.totalUsed)),
-                    buildInfoRow("الاستهلاك الحالي", widget.subscriber.totalUsed),
-                    buildInfoRow("الباقه", widget.subscriber.totalQuota),
-                    buildInfoRow("تاريخ الانتهاء", widget.subscriber.expireDate),
-                    buildInfoRow("اسم المستخدم", widget.subscriber.username),
-                    buildInfoRow("الخدمة", widget.subscriber.subscriptionType),
-                    buildInfoRow("ديون", widget.subscriber.credit),
-                    buildInfoRow("المدير", widget.subscriber.createdBy),
+                    buildInfoRow("البيانات المتبقية", _calculateRemainingQuota(widget.subscriber.totalQuota!, widget.subscriber.totalUsed!)),
+                    buildInfoRow("الاستهلاك الحالي", widget.subscriber.totalUsed!),
+                    buildInfoRow("الباقه", widget.subscriber.totalQuota!),
+                    buildInfoRow("تاريخ الانتهاء", widget.subscriber.expireDate!),
+                    buildInfoRow("اسم المستخدم", widget.subscriber.username!),
+                    buildInfoRow("الخدمة", (widget.subscriber.subscriptionType??"")== "Login-User"?"هوت سبوت":"برودباند"),
+                    buildInfoRow("ديون", widget.subscriber.credit!),
+                    buildInfoRow("المدير", widget.subscriber.createdBy!),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.error,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('هل أنت متأكد؟'),
+                                        content: Text('هل أنت متأكد من حذف الحساب؟'),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('لا'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop(); // Close the dialog
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('نعم'),
+                                            onPressed: () {
+                                              widget.onDelete(); // Apply the action
+                                              Navigator.of(context).pop(); // Close the dialog
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Text(
+                                  'حذف الحساب',
+                                  style: TextStyle(color: AppColors.primaryText, fontSize: 16.sp),
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.buttonBackground,
+                                ),
+                                onPressed: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) =>  AddBalanceScreen(
+                                      subscriber: widget.subscriber,
+                                    )),
+                                  );
+                                },
+                                child: Text(  'اشحن الرصيد',
+                                    style:  TextStyle(color: AppColors.primaryText,fontSize: 16.sp)),
+                              ),
+
+
+
+                            ],
+                          ),
+                          SizedBox(height: 8.h),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.buttonBackground,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('هل أنت متأكد؟'),
+                                        content: Text('هل أنت متأكد من تصفير الحساب؟'),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('لا'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop(); // Close the dialog
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('نعم'),
+                                            onPressed: () {
+                                              widget.resetBalance(); // Apply the action
+                                              Navigator.of(context).pop(); // Close the dialog
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Text(
+                                  'تصفير الحساب',
+                                  style: TextStyle(color: AppColors.primaryText, fontSize: 16.sp),
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              BlocBuilder<OffersCubit, OffersState>(
+                                builder: (context, state) {
+                                  if (state is OffersLoading) {
+                                    return const Center(child: CircularProgressIndicator());
+                                  }
+
+                                  final cubit = context.read<OffersCubit>();
+
+                                  return ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.buttonBackground,
+                                    ),
+                                    onPressed: () async {
+                                      final selectedPlan = await showDialog<Map<String, String>>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          String? selectedId;
+                                          return AlertDialog(
+                                            title: Text('اختر خطة الاشتراك',style: TextStyle(color: AppColors.primaryText,fontSize: 16.sp,fontWeight: FontWeight.bold) ,),
+                                            content: DropdownButtonFormField<String>(
+                                              isExpanded: true,
+                                              items: cubit.offers.map((offer) {
+                                                return DropdownMenuItem<String>(
+                                                  value: offer.id.toString(),
+                                                  child: Text(offer.srvName!, style: TextStyle(color: AppColors.primaryText,fontSize: 16.sp)),
+                                                );
+                                              }).toList(),
+                                              onChanged: (value) {
+                                                selectedId = value;
+                                              },
+                                              decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                              ),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, null);
+                                                },
+                                                child: const Text('الغاء'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  final selectedOffer = cubit.offers.firstWhere((offer) => offer.id.toString() == selectedId);
+                                                  subscribersCubit.renewSubscribtion(userName: widget.subscriber.username!, context: context, id: selectedOffer.id.toString()).then((value) {
+                                                    Navigator.pop(context);
+                                                  });
+
+                                                },
+                                                child: const Text('تأكيد'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+
+                                      if (selectedPlan != null) {
+                                        // Use the selected plan's ID and name
+                                        print('Selected Plan ID: ${selectedPlan['id']}, Name: ${selectedPlan['name']}');
+                                        // Implement your logic here for renewing the subscription with selectedPlan['id']
+                                      }
+                                    },
+                                    child: Text(
+                                      'تجديد الاشتراك',
+                                      style: TextStyle(color: AppColors.primaryText, fontSize: 16.sp),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -166,136 +348,16 @@ class MyCustomWidgetState extends State<MyCustomWidget> {
               ),
 
               // Action Buttons
-              if (_isAddingBalance)
-                TextField(
-                  controller: _balanceController,
-                  decoration: const InputDecoration(
-                    hintText: 'ادخل المبلغ',
-                    hintStyle: TextStyle(color: AppColors.secondaryText),
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.error,
-                      ),
-                      onPressed: widget.onDelete,
-                      child: Text('حذف الحساب',
-                          style: TextStyle(
-                              color: AppColors.primaryText,
-                              fontSize: 16.sp)),
-                    ),
-                    SizedBox(width: 8.w),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.buttonBackground,
-                      ),
-                      onPressed: (){
-                        if (_balanceController.text.isNotEmpty) {
-                          // final newBalance = double.parse(widget.subscriber.credit) +
-                          //     double.parse(_balanceController.text);
-                          subscribersCubit.addBalance(userName: widget.subscriber.username, context: widget.ctx, amount: _balanceController.text);
-                          _balanceController.clear();
-                        } else {
-                          setState(() {
-                            _isAddingBalance = !_isAddingBalance;
-                          });
-                        }
-                      },
-                      child: Text(_isAddingBalance ? 'اشحن' : 'اضافة المبلغ',
-                          style:  TextStyle(color: AppColors.primaryText,fontSize: 16.sp)),
-                    ),
-                    SizedBox(width: 8.w),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.buttonBackground,
-                      ),
-                      onPressed: (){
-                        widget.resetBalance();
-                      },
-                      child:  Text('تصفير الحساب', style: TextStyle(color: AppColors.primaryText,fontSize: 16.sp)),
-                    ),
-                    SizedBox(width: 8.w),
-      BlocBuilder<OffersCubit, OffersState>(
-        builder: (context, state) {
-          if (state is OffersLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+              // if (_isAddingBalance)
+              //   TextField(
+              //     controller: _balanceController,
+              //     decoration: const InputDecoration(
+              //       hintText: 'ادخل المبلغ',
+              //       hintStyle: TextStyle(color: AppColors.secondaryText),
+              //     ),
+              //     keyboardType: TextInputType.number,
+              //   ),
 
-          final cubit = context.read<OffersCubit>();
-
-          return ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.buttonBackground,
-            ),
-            onPressed: () async {
-              final selectedPlan = await showDialog<Map<String, String>>(
-                context: context,
-                builder: (BuildContext context) {
-                  String? selectedId;
-                  return AlertDialog(
-                    title: Text('اختر خطة الاشتراك',style: TextStyle(color: AppColors.primaryText,fontSize: 16.sp,fontWeight: FontWeight.bold) ,),
-                    content: DropdownButtonFormField<String>(
-                      isExpanded: true,
-                      items: cubit.offers.map((offer) {
-                        return DropdownMenuItem<String>(
-                          value: offer.id.toString(),
-                          child: Text(offer.srvName!, style: TextStyle(color: AppColors.primaryText,fontSize: 16.sp)),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        selectedId = value;
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context, null);
-                        },
-                        child: const Text('الغاء'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          final selectedOffer = cubit.offers.firstWhere((offer) => offer.id.toString() == selectedId);
-                          subscribersCubit.renewSubscribtion(userName: widget.subscriber.username, context: context, id: selectedOffer.id.toString()).then((value) {
-                            Navigator.pop(context);
-                          });
-
-                        },
-                        child: const Text('تأكيد'),
-                      ),
-                    ],
-                  );
-                },
-              );
-
-              if (selectedPlan != null) {
-                // Use the selected plan's ID and name
-                print('Selected Plan ID: ${selectedPlan['id']}, Name: ${selectedPlan['name']}');
-                // Implement your logic here for renewing the subscription with selectedPlan['id']
-              }
-            },
-            child: Text(
-              'تجديد الاشتراك',
-              style: TextStyle(color: AppColors.primaryText, fontSize: 16.sp),
-            ),
-          );
-        },
-      ),
-
-                  ],
-                ),
-              ),
             ],
           ),
         ),

@@ -222,7 +222,7 @@ class AddNewSubscriberState extends State<AddNewSubscriber> {
                       password: passwordController.text,
                       mobile: mobileNumberController.text,
                       pin: accountCodeController.text,
-                      srvType: (serviceType??0+1).toString(),
+                      srvType: serviceType.toString(),
                       //serviceType!,
                       afterExp: endOfSubscription.toString(),
                       //endOfSubscription!

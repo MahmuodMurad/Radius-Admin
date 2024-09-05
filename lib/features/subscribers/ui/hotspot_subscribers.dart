@@ -40,12 +40,12 @@ class HotSpotSubscribersView extends StatelessWidget {
                   ctx: context,
                   subscriber: cubit.hostSubscribers[index],
                   resetBalance: () {
-                    cubit.resetBalance(context: context,userName: cubit.allSubscribers[index].username);
+                    cubit.resetBalance(context: context,userName: cubit.hostSubscribers[index].username!);
                   } ,
                   onDelete: () {
                     cubit.deleteSubscribers(
                         context: context,
-                        userName: cubit.allSubscribers[index].username);
+                        userName: cubit.hostSubscribers[index].username!);
                   },
                 );
               }, separatorBuilder: (context, index) =>  SizedBox(

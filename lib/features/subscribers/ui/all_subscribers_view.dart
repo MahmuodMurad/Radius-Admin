@@ -51,10 +51,10 @@ class AllSubscribersView extends StatelessWidget {
               subscriber: cubit.allSubscribers[index],
 ctx:  context,
               resetBalance: () {
-                cubit.resetBalance(context: context,userName: cubit.allSubscribers[index].username);
+                cubit.resetBalance(context: context,userName: cubit.allSubscribers[index].username!);
               } ,
               onDelete: () {
-                cubit.deleteSubscribers(context: context, userName: cubit.allSubscribers[index].username);
+                cubit.deleteSubscribers(context: context, userName: cubit.allSubscribers[index].username!);
               },
             );
           },

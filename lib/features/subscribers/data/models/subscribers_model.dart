@@ -1,14 +1,14 @@
 class SubscribersModel {
-  final String username;
-  final String fullname;
-  final String subscriptionType;
-  final String credit;
-  final String expireDate;
-  final String createdBy;
-  final String totalQuota;
-  final String currentPlan;
-  final String totalUsed;
-  final bool onlineStatus;
+  final String? username;
+  final String? fullname;
+  final String? subscriptionType;
+  final String? credit;
+  final String? expireDate;
+  final String? createdBy;
+  final String? totalQuota;
+  final String? currentPlan;
+  final String? totalUsed;
+  final bool? onlineStatus;
 
   SubscribersModel({
     required this.username,

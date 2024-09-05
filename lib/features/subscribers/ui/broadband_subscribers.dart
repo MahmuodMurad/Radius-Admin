@@ -38,13 +38,13 @@ class BroadbandSubscribersView extends StatelessWidget {
                 return MyCustomWidget(
                   subscriber: cubit.broadbandSubscribers[index],
                   resetBalance: () {
-                    cubit.resetBalance(context: context,userName: cubit.allSubscribers[index].username);
+                    cubit.resetBalance(context: context,userName: cubit.broadbandSubscribers[index].username!);
                   } ,
                   ctx: context,
                   onDelete: () {
                     cubit.deleteSubscribers(
                         context: context,
-                        userName: cubit.allSubscribers[index].username);
+                        userName: cubit.broadbandSubscribers[index].username!);
                   },
                 );
               },

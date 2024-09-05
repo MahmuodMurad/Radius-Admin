@@ -92,3 +92,13 @@ class GetCustomerFinancialStatusFailure extends SubscribersState {
 
   GetCustomerFinancialStatusFailure({required this.error});
 }
+
+class AddBalanceLoading extends SubscribersState {}
+
+class AddBalanceSuccess extends SubscribersState {}
+
+class AddBalanceFailure extends SubscribersState {
+  final String error;
+
+  AddBalanceFailure({required this.error});
+}
