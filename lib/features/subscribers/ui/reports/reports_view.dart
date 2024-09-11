@@ -136,6 +136,7 @@ class ReportsView extends StatelessWidget {
                         );
                       },
                       child: HomeItem(
+isReport: true,
                           count:cubit.customerFinancialStatus.length,
                           title: "تقرير حالة العملاء المالي",
                           icon: Icons.money),
@@ -151,6 +152,7 @@ class ReportsView extends StatelessWidget {
                         );
                       },
                       child: HomeItem(
+                        isReport: true,
                           count:cubit.usersStatus.length,
                           title: "تقرير حالة العملاء",
                           icon: Icons.query_stats_outlined),

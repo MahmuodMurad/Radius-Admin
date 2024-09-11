@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "282822300640",
+    "project_id": "redius-ec442",
+    "storage_bucket": "redius-ec442.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282822300640:android:c0277d06d8d6c676f7d185",
+        "android_client_info": {
+          "package_name": "com.example.radius"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSrh5aKRgvqt6tEw-fM68HFl3FM5ilWR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282822300640:android:503c9ddfdd8a9f23f7d185",
+        "android_client_info": {
+          "package_name": "com.example.redius_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSrh5aKRgvqt6tEw-fM68HFl3FM5ilWR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

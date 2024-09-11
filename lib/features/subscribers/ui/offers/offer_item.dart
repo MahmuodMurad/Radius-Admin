@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:redius_admin/core/utils/app_colors.dart';
@@ -11,6 +12,7 @@ class ServiceCard extends StatelessWidget {
   final String totalQuota;
   final String duration;
   final String serviceName;
+  final VoidCallback deleteService;
 
   ServiceCard({
     required this.status,
@@ -20,7 +22,7 @@ class ServiceCard extends StatelessWidget {
     required this.dailyQuota,
     required this.totalQuota,
     required this.duration,
-    required this.serviceName,
+    required this.serviceName, required this.deleteService,
   });
 
   @override
@@ -32,14 +34,13 @@ class ServiceCard extends StatelessWidget {
       ),
       elevation: 8,
       child: Container(
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.only(left:16.w, right: 16.w, bottom: 16.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.r),
           gradient: LinearGradient(
             colors: [
               AppColors.primary.withOpacity(0.1),
               AppColors.primary,
-
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -48,14 +49,44 @@ class ServiceCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    deleteService();
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    color: AppColors.error,
+                    size: 30.sp,
+                  ),
+                ),
+              ],
+            ),
+
             _buildHeader(),
-            SizedBox(height: 10.0.h),
-            _buildDetailRow('السرعة', speed),
-            _buildDetailRow('الكوتة اليومية', dailyQuota),
-            _buildDetailRow('الكوتة الكلية', totalQuota),
-            _buildDetailRow('المدة', duration),
+
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildDetailRow('السرعة', speed),
+                _buildDetailRow('الكوتة اليومية', dailyQuota),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildDetailRow('الكوتة الكلية', totalQuota),
+                _buildDetailRow('المدة', duration),
+              ],
+            ),
+
             _buildDetailRow('السعر', '$price '),
-            SizedBox(height: 10.0.h),
+
             _buildFooter(),
           ],
         ),
@@ -67,12 +98,17 @@ class ServiceCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          serviceName,
-          style: TextStyle(
-            fontSize: 20.0.sp,
-            color: AppColors.primaryText,
-            fontWeight: FontWeight.bold,
+        SizedBox(
+          width: 240.0.w,
+          child: Text(
+            serviceName,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 20.0.sp,
+              color: AppColors.primaryText,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         Container(
@@ -95,23 +131,25 @@ class ServiceCard extends StatelessWidget {
 
   Widget _buildDetailRow(String label, String value) {
     return Padding(
-      padding:  EdgeInsets.symmetric(vertical: 5.0.h),
+      padding: EdgeInsets.symmetric(vertical: 5.0.h),
       child: Row(
+        mainAxisSize: MainAxisSize.min, // Adjust to take only the required space
         children: [
           Text(
             '$label: ',
-             style: TextStyle(
-        fontSize: 14.sp,
-        color: Colors.white70,
-        fontWeight: FontWeight.w500,
-      ),
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.white70,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          Expanded(
+          Flexible(
+            fit: FlexFit.loose, // Ensure the row can shrink if necessary
             child: Text(
               value,
               style: TextStyle(
                 fontSize: 14.sp,
-                color:  Colors.white,
+                color: Colors.white,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -121,13 +159,14 @@ class ServiceCard extends StatelessWidget {
     );
   }
 
+
   Widget _buildFooter() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           'تاريخ الإضافة: $createdOn',
-          style:  TextStyle(
+          style: TextStyle(
             fontSize: 14.0.sp,
             color: Colors.white,
           ),

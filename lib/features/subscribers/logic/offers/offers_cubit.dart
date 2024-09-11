@@ -17,7 +17,29 @@ class OffersCubit extends Cubit<OffersState> {
   int _selecteddownloadSpeedUnit = 0; // Default to GB
 
   int get selecteddownloadSpeedUnit => _selecteddownloadSpeedUnit;
+  Future<void> deleteOffer(
+      {required String id, required BuildContext context}) async {
+    emit(DeleteOfferLoading());
+    try {
+      final response =
+      await offersRepo.deleteOffer(id: id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(response),
+            backgroundColor: Colors.green),
+      );
+      getOffers();
+      print("deleteOffer $id");
 
+
+
+      // emit(AllOfferUpdated());
+
+      emit(DeleteOfferSuccess());
+    } catch (e) {
+      emit(DeleteOfferFailure(error: e.toString()));
+    }
+  }
   void updateDownloadSelectedUnit(int value) {
     _selecteddownloadSpeedUnit = value;
     emit(OffersUnitChanged(value: value));
@@ -56,7 +78,7 @@ class OffersCubit extends Cubit<OffersState> {
     required String uploadSpeed,
     required double srvPrice,
     required int srvTime,
-    required int gbValue,
+    required double gbValue,
     required int totalQuota,
     required double srvPriceExtra,
     // required double downSpeedUser,
@@ -70,7 +92,7 @@ class OffersCubit extends Cubit<OffersState> {
     emit(OffersLoading());
     try {
       // Call the API to add offer
-      await offersRepo.addOffer(
+      final response =  await offersRepo.addOffer(
         srvPriceExtra: srvPriceExtra,
         // downSpeedUser: downSpeedUser,
         downloadValue: downloadValue,
@@ -89,7 +111,7 @@ class OffersCubit extends Cubit<OffersState> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم اضافه العرض بنجاح'), backgroundColor: Colors.green),
+         SnackBar(content: Text(response.toString()), backgroundColor: Colors.green),
       );
       await getOffers();
       Navigator.pop(context);

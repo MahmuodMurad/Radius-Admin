@@ -21,3 +21,13 @@ final int value;
   OffersUnitChanged({required this.value});
 
 }
+
+final class DeleteOfferLoading extends OffersState {}
+
+final class DeleteOfferSuccess extends OffersState {}
+
+final class DeleteOfferFailure extends OffersState {
+  final String error;
+
+  DeleteOfferFailure({required this.error});
+}

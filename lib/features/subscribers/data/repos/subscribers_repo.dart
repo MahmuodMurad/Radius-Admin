@@ -8,17 +8,21 @@ import 'package:redius_admin/features/subscribers/data/models/customer_financial
 import 'package:redius_admin/features/subscribers/data/models/server_group_model.dart';
 import 'package:redius_admin/features/subscribers/data/models/subscribers_model.dart';
 import 'package:redius_admin/features/subscribers/data/models/user_group_model.dart';
+import 'package:redius_admin/main.dart';
 
 class SubscribersRepo {
   final ApiConsumer api = DioConsumer();
 
-  Future<List<SubscribersModel>> getSubscribers() async {
+  Future<List<DataModel>> getSubscribers() async {
     try {
       final response = await api.get(
         EndPoint.allSubscribers,
       );
-      final List<SubscribersModel> subscribers =
-          (response as List).map((e) => SubscribersModel.fromJson(e)).toList();
+     allActiveSubscribers = response['active_users'];
+       allUnActiveSubscribers =response['expired_users_count'];
+       allOnlineSubscribers = response['online_total'];
+      final List<DataModel> subscribers =
+          (response['data'] as List).map((e) => DataModel.fromJson(e)).toList();
       return subscribers;
     } on ServerExceptions catch (e) {
       print(e);
@@ -43,13 +47,16 @@ class SubscribersRepo {
       rethrow;
     }
   }
-  Future<List<SubscribersModel>> getHostSubscribers() async {
+  Future<List<DataModel>> getHostSubscribers() async {
     try {
       final response = await api.get(
         EndPoint.hotspotsSubscribers,
       );
-      final List<SubscribersModel> subscribers =
-          (response as List).map((e) => SubscribersModel.fromJson(e)).toList();
+      hotspotActiveSubscribers = response['active_users'];
+      hotspotUnActiveSubscribers =response['expired_users_count'];
+      hotspotOnlineSubscribers = response['online_total'];
+      final List<DataModel> subscribers =
+          (response['data'] as List).map((e) => DataModel.fromJson(e)).toList();
       return subscribers;
     } on ServerExceptions catch (e) {
       print(e);
@@ -57,13 +64,16 @@ class SubscribersRepo {
     }
   }
 
-  Future<List<SubscribersModel>> getBroadbandSubscribers() async {
+  Future<List<DataModel>> getBroadbandSubscribers() async {
     try {
       final response = await api.get(
         EndPoint.broadbandSubscribers,
       );
-      final List<SubscribersModel> subscribers =
-          (response as List).map((e) => SubscribersModel.fromJson(e)).toList();
+      brodbandActiveSubscribers = response['active_users'];
+      brodbandUnActiveSubscribers =response['expired_users_count'];
+      brodbandOnlineSubscribers = response['online_total'];
+      final List<DataModel> subscribers =
+          (response['data'] as List).map((e) => DataModel.fromJson(e)).toList();
       return subscribers;
     } on ServerExceptions catch (e) {
       print(e);
@@ -168,6 +178,26 @@ class SubscribersRepo {
       );
 
       print('Subscriber Deleted');
+      return response['message'];
+    } on ServerExceptions catch (e) {
+      print(e);
+
+      return e.errorModel.error;
+    }
+  }
+  Future<String> resetSubscription({required String userName}) async {
+    try {
+      final formData = FormData.fromMap({
+        'username': userName,
+      });
+
+      final response = await api.post(
+        EndPoint.resetSubscription,
+        body: formData,
+        isFormData: true,
+      );
+
+      print('Subscriber reset_subscription');
       return response['message'];
     } on ServerExceptions catch (e) {
       print(e);

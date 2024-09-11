@@ -22,13 +22,33 @@ class OffersRepo {
       rethrow;
     }
   }
-  Future<void> addOffer({
+  Future<String> deleteOffer({required String id}) async {
+    try {
+      final formData = FormData.fromMap({
+        'id': id,
+      });
+
+      final response = await api.post(
+        EndPoint.deleteOffer,
+        body: formData,
+        isFormData: true,
+      );
+
+      print('offer Deleted');
+      return response['message'];
+    } on ServerExceptions catch (e) {
+      print(e);
+
+      return e.errorModel.error;
+    }
+  }
+  Future<String> addOffer({
     required String srvName,
     required String downloadSpeed,
     required String uploadSpeed,
     required double srvPrice,
     required int srvTime,
-    required int gbValue,
+    required double gbValue,
     required int totalQuota,
     required double srvPriceExtra,
     // required double downSpeedUser,
@@ -62,9 +82,9 @@ class OffersRepo {
         }),
       );
       print("addoffer$response");
-      return response;
-    } on ServerExceptions catch (e) {
-      rethrow;
+      return response['success'];
+    } on DioException catch (e) {
+      return e.response?.data['error'];
     }
   }
 

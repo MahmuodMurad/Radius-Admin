@@ -191,22 +191,23 @@ class AddOffers extends StatelessWidget {
 
 
                   _buildTextField(
-                    label: 'سعر الخدمة للوكلاء',
+                    label: 'سعر الخدمة للموزعين',
                     controller: _srvPriceAgentsController,
                     hintText: 'Enter service price for agents',
                     keyboardType: TextInputType.number,
                   ),
                   _buildTextField(
-                    label: 'اسم الوكيل',
+                    label: 'اسم الموزع',
+                    isServName: true,
                     controller: _srvNameAgentsController,
-                    hintText: 'Enter agent name',
+                    hintText: 'ادخل اسم الموزع',
                   ),
-                  _buildTextField(
-                    label: 'كل الجيجات الاضافية',
-                    controller: _totalQuotaExtraController,
-                    hintText: 'ادخل كل الجيجات الاضافية',
-                    keyboardType: TextInputType.number,
-                  ),
+                  // _buildTextField(
+                  //   label: 'كل الجيجات الاضافية',
+                  //   controller: _totalQuotaExtraController,
+                  //   hintText: 'ادخل كل الجيجات الاضافية',
+                  //   keyboardType: TextInputType.number,
+                  // ),
                   SizedBox(height: 32.0.h),
                   state is OffersLoading
                       ? const Center(child: CircularProgressIndicator())
@@ -230,7 +231,7 @@ class AddOffers extends StatelessWidget {
                           uploadSpeed: _uploadSpeedController.text,
                           srvPrice: double.parse(_srvPriceController.text),
                           srvTime: int.parse(_srvTimeController.text),
-                          gbValue: offersCubit.selectedGBSpeedUnit,
+                          gbValue: offersCubit.selectedGBSpeedUnit.toDouble(),
                           totalQuota: int.parse(_totalQuotaController.text),
                           srvPriceExtraGb: double.parse(_srvPriceExtraController.text), // New
                           srvPriceAgents: double.parse(_srvPriceAgentsController.text), // New
@@ -259,12 +260,14 @@ class AddOffers extends StatelessWidget {
     required String label,
     required TextEditingController controller,
     String? hintText,
+    bool isServName = false,
+    bool isGbValue = false,
     TextInputType keyboardType = TextInputType.text,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0.h),
       child: TextFormField(
-        controller: controller,
+        controller:  controller,
         decoration: InputDecoration(
           fillColor: AppColors.itemBackground,
           filled: true,
@@ -273,11 +276,9 @@ class AddOffers extends StatelessWidget {
           border: const OutlineInputBorder(),
         ),
         keyboardType: keyboardType,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter $label';
-          }
-          return null;
+         validator: (value) {
+           isServName ? null :(value == null || value.isEmpty)? 'Please enter $label' : null;
+
         },
       ),
     );

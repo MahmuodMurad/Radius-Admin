@@ -12,6 +12,7 @@ import 'package:redius_admin/features/subscribers/ui/all_subscribers_view.dart';
 import 'package:redius_admin/features/subscribers/ui/broadband_subscribers.dart';
 import 'package:redius_admin/features/subscribers/ui/home/view/widgets/home_item.dart';
 import 'package:redius_admin/features/subscribers/ui/hotspot_subscribers.dart';
+import 'package:redius_admin/main.dart';
 
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
@@ -25,7 +26,7 @@ class HomeViewBody extends StatelessWidget {
         return BlocBuilder<NetworksCubit, NetworksState>(
           builder: (context, state) {
             NetworksCubit cubit = BlocProvider.of<NetworksCubit>(context);
-    return state is GetNetworkUsaingLoading || state is BroadbandSubscribersLoading || state is HostSubscribersLoading|| state is AllSubscribersLoading ? const Scaffold(body: Center(child: CircularProgressIndicator()),) : Scaffold(
+    return state is GetNetworkUsaingLoading || state is BroadbandSubscribersLoading || state is HostSubscribersLoading|| state is AllSubscribersLoading || state is GetCustomerFinancialStatusLoading || state is GetUsersStatusLoading || state is GetCustomerFinanciallStatusLoading  ? const Scaffold(body: Center(child: CircularProgressIndicator()),) : Scaffold(
           backgroundColor: AppColors.secondaryBackground,
           appBar: AppBar(
             backgroundColor: AppColors.secondary,
@@ -101,6 +102,10 @@ class HomeViewBody extends StatelessWidget {
                         );
                       },
                       child: HomeItem(
+                        activeUsers:allActiveSubscribers,
+                          expiredUsersCount: allUnActiveSubscribers,
+                          onlineTotal: allOnlineSubscribers,
+
                           count: Scubit.allSubscribers.length,
                           title: "كل المشتركين",
                           icon: Icons.people_alt_outlined),
@@ -116,6 +121,9 @@ class HomeViewBody extends StatelessWidget {
                         );
                       },
                       child: HomeItem(
+                        activeUsers: hotspotActiveSubscribers,
+                          expiredUsersCount: hotspotUnActiveSubscribers,
+                          onlineTotal: hotspotOnlineSubscribers,
                           count: Scubit.hostSubscribers.length,
                           title: "مشتركين الهوتسبوت",
                           icon: Icons.wifi),
@@ -131,6 +139,9 @@ class HomeViewBody extends StatelessWidget {
                         );
                       },
                       child: HomeItem(
+                        activeUsers: brodbandActiveSubscribers,
+                          expiredUsersCount: brodbandUnActiveSubscribers,
+                          onlineTotal: brodbandOnlineSubscribers,
                           count: Scubit.broadbandSubscribers.length,
                           title: "مشتركين البرودباند",
                           icon: Icons.broadcast_on_home_outlined),

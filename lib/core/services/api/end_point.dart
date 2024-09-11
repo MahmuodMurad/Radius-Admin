@@ -15,9 +15,11 @@ class EndPoint {
   static const String subscribersAddBalance = 'subscribers/add_balance';
   static const String subscribersResetBalance = 'subscribers/reset_balance';
   static const String subscribersRenewSubscribtion = 'subscribers/renew_subscription';
+  static const String resetSubscription = 'subscribers/reset_subscription';
   //! offers
   static const String allOffers = 'offers/all';
   static const String addOffer = 'offers/add';
+  static const String deleteOffer = 'offers/delete';
   //! vouchers
   static const String seriesVouchers = 'vouchers/series';
   static const String allVoucher = 'vouchers/all';
@@ -27,4 +29,6 @@ class EndPoint {
   static const String networkUsaing = 'network/networkUsaing';
   static const String customerFinancialStatus =
       'network/customerFinancialStatus';
+
+
 }

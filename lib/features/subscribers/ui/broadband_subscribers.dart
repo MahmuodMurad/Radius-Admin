@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:redius_admin/core/shared_widgets/app_drawer.dart';
 import 'package:redius_admin/core/utils/app_colors.dart';
 import 'package:redius_admin/core/utils/app_constraints.dart';
 
@@ -17,6 +18,7 @@ class BroadbandSubscribersView extends StatelessWidget {
       builder: (context, state) {
         SubscribersCubit cubit = BlocProvider.of<SubscribersCubit>(context);
         return Scaffold(
+          drawer: const AppDrawer(),
           appBar: AppBar(
             title: const Text(
               "مشتركين البرود باند",
@@ -33,25 +35,33 @@ class BroadbandSubscribersView extends StatelessWidget {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : cubit.broadbandSubscribers.isEmpty? const Center(child: Text("لا يوجد مشتركين")):ListView.separated(
-              itemBuilder: (context, index) {
-                return MyCustomWidget(
-                  subscriber: cubit.broadbandSubscribers[index],
-                  resetBalance: () {
-                    cubit.resetBalance(context: context,userName: cubit.broadbandSubscribers[index].username!);
-                  } ,
-                  ctx: context,
-                  onDelete: () {
-                    cubit.deleteSubscribers(
-                        context: context,
-                        userName: cubit.broadbandSubscribers[index].username!);
-                  },
-                );
-              },
-              separatorBuilder: (context, index) => SizedBox(
-                height: 10.h,
+              : cubit.broadbandSubscribers.isEmpty? const Center(child: Text("لا يوجد مشتركين")):RefreshIndicator(
+                onRefresh: () async {
+                  cubit.getBroadbandSubscribers();
+                },
+                child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return MyCustomWidget(
+                    subscriber: cubit.broadbandSubscribers[index],
+                    reseteSubscription: () {
+                      cubit.resetSubscription(context: context, userName: cubit.allSubscribers[index].username!);
+                    },
+                    resetBalance: () {
+                      cubit.resetBalance(context: context,userName: cubit.broadbandSubscribers[index].username!);
+                    } ,
+                    ctx: context,
+                    onDelete: () {
+                      cubit.deleteSubscribers(
+                          context: context,
+                          userName: cubit.broadbandSubscribers[index].username!);
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 10.h,
+                ),
+                itemCount: cubit.broadbandSubscribers.length),
               ),
-              itemCount: cubit.broadbandSubscribers.length),
         );
       },
     );

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,17 +19,29 @@ import 'package:redius_admin/features/subscribers/logic/offers/offers_cubit.dart
 import 'package:redius_admin/features/subscribers/logic/series_vouchers/series_vouchers_cubit.dart';
 import 'package:redius_admin/features/subscribers/logic/subscribers/subscribers_cubit.dart';
 import 'package:redius_admin/features/subscribers/ui/home/view/home_view.dart';
+import 'package:redius_admin/firebase_options.dart';
 import 'package:redius_admin/splash_screen.dart';
 
 bool hasInternet = false;
 Dio dio = Dio();
+int allActiveSubscribers = 0;
+int allUnActiveSubscribers = 0;
+int allOnlineSubscribers = 0;
+int hotspotActiveSubscribers = 0;
+int hotspotUnActiveSubscribers = 0;
+int hotspotOnlineSubscribers = 0;
+int brodbandActiveSubscribers = 0;
+int brodbandUnActiveSubscribers = 0;
+int brodbandOnlineSubscribers = 0;
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 // String gSessionId = '';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Bloc.observer = MyBlocObserver();
   dio.interceptors.add(AuthInterceptor());
   runApp(
@@ -107,7 +120,7 @@ class hrState extends State<RediusAdmin> {
               theme: ThemeData(
                 scaffoldBackgroundColor: AppColors.secondaryBackground,
               ),
-              title: "اشتراكي ادمن",
+              title: "STC Misr",
               debugShowCheckedModeBanner: false,
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,

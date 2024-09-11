@@ -16,12 +16,13 @@ class VoucherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isActive = voucherData.enableStatus == "1";
-    bool isExpired = DateTime.parse(voucherData.expireDate!).isBefore(
-        DateTime.now());
+    bool isExpired =
+    DateTime.parse(voucherData.expireDate!).isBefore(DateTime.now());
 
     return BlocBuilder<SeriesVouchersCubit, SeriesVouchersState>(
       builder: (context, state) {
-        SeriesVouchersCubit seriesVouchersCubit = context.read<SeriesVouchersCubit>();
+        SeriesVouchersCubit seriesVouchersCubit =
+        context.read<SeriesVouchersCubit>();
         return Card(
           margin: EdgeInsets.all(16.w),
           shape: RoundedRectangleBorder(
@@ -36,7 +37,6 @@ class VoucherCard extends StatelessWidget {
                 colors: [
                   AppColors.primary.withOpacity(0.1),
                   AppColors.primary,
-
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -47,34 +47,46 @@ class VoucherCard extends StatelessWidget {
               children: [
                 _buildHeader(context, isExpired),
                 Divider(color: Colors.white, thickness: 1.h),
-                SizedBox(height: 8.h),
-                _buildDetailRow(
-                  context,
-                  label: "العدد الكلي	",
-                  value: voucherData.voucherCount.toString(),
-                  icon: FontAwesomeIcons.ticket,
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildDetailRow(
+                        context,
+                        label: "العدد الكلي",
+                        value: voucherData.voucherCount.toString(),
+                        icon: FontAwesomeIcons.ticket,
+                      ),
+                    ),
+
+                    Expanded(
+                      child: _buildDetailRow(
+                        context,
+                        label: "القيمة",
+                        value: "${voucherData.cardValue}",
+                        icon: FontAwesomeIcons.dollarSign,
+                      ),
+                    ),
+                  ],
                 ),
+
                 _buildDetailRow(
                   context,
-                  label: "القيمة",
-                  value: "${voucherData.cardValue}",
-                  icon: FontAwesomeIcons.dollarSign,
-                ),
-                _buildDetailRow(
-                  context,
-                  label: "العدد المستخدم	",
+                  label: "العدد المستخدم",
                   value: voucherData.totalUsed.toString(),
                   icon: FontAwesomeIcons.chartBar,
                 ),
+                SizedBox(width: 16.w), // Spacing between detail rows
                 _buildDetailRow(
                   context,
-                  label: "تاريخ الانشاء	",
+                  label: "تاريخ الانشاء",
                   value: voucherData.createOnDate!,
                   icon: FontAwesomeIcons.calendarDay,
                 ),
+                SizedBox(height: 8.h), // Optional spacing
                 _buildDetailRow(
                   context,
-                  label: "تاريخ الانتهاء	",
+                  label: "تاريخ الانتهاء",
                   value: voucherData.expireDate!,
                   icon: FontAwesomeIcons.calendarXmark,
                   isWarning: isExpired,
@@ -91,14 +103,18 @@ class VoucherCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          "مجموعة الكروت: ${voucherData.vouchersSeries}",
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        Expanded( // Ensuring the text doesn't overflow
+          child: Text(
+            "مجموعة الكروت: ${voucherData.vouchersSeries}",
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
+        SizedBox(width: 16.w), // Optional spacing
         Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
           decoration: BoxDecoration(
@@ -142,7 +158,8 @@ class VoucherCard extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          Expanded(
+          Flexible(
+            fit: FlexFit.loose,
             child: Text(
               value,
               style: TextStyle(
@@ -151,6 +168,7 @@ class VoucherCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis, // Prevent overflow
             ),
           ),
         ],

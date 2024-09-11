@@ -16,9 +16,9 @@ class SubscribersCubit extends Cubit<SubscribersState> {
 
   final SubscribersRepo _subscribersRepo = SubscribersRepo();
 
-  List<SubscribersModel> allSubscribers = [];
-  List<SubscribersModel> hostSubscribers = [];
-  List<SubscribersModel> broadbandSubscribers = [];
+  List<DataModel> allSubscribers = [];
+  List<DataModel> hostSubscribers = [];
+  List<DataModel> broadbandSubscribers = [];
   List<ServerGroupModel> serverGroups = [];
   List<UserGroupModel> userGroups = [];
   List<CustomerFinancialStatusModel> customerFinancialStatus = [];
@@ -33,16 +33,16 @@ class SubscribersCubit extends Cubit<SubscribersState> {
   }
 
   Future<void> getCustomerFinancialStatus() async {
-    emit(GetCustomerFinancialStatusLoading());
+    emit(GetCustomerFinanciallStatusLoading());
     try {
       final response = await _subscribersRepo.getcustomerFinancialStatus();
 
       customerFinancialStatus.addAll(response);
       print(customerFinancialStatus.first.toJson());
-      emit(GetCustomerFinancialStatusSuccess());
+      emit(GetCustomerFinanciallStatusSuccess());
     } catch (e) {
       print(e.toString());
-      emit(GetCustomerFinancialStatusFailure(error: e.toString()));
+      emit(GetCustomerFinanciallStatusFailure(error: e.toString()));
     }
   }
 
@@ -177,6 +177,28 @@ class SubscribersCubit extends Cubit<SubscribersState> {
       emit(DeleteSubscribersSuccess());
     } catch (e) {
       emit(DeleteSubscribersFailure(error: e.toString()));
+    }
+  }
+  Future<void> resetSubscription(
+      {required String userName, required BuildContext context}) async {
+    emit(ReseteSubscriptionSubscribersLoading());
+    try {
+      final response =
+          await _subscribersRepo.resetSubscription(userName: userName);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("تم حذف الاشتراك $userName بنجاح "),
+            backgroundColor: Colors.green),
+      );
+      print("reset_subscription $userName");
+
+
+      // emit(AllSubscribersUpdated());
+
+      emit(ReseteSubscriptionSubscribersSuccess());
+    } catch (e) {
+      print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz${e.toString()}");
+      emit(ReseteSubscriptionSubscribersFailure(error: e.toString()));
     }
   }
 

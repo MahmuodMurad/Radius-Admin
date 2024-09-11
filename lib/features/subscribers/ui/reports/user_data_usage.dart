@@ -50,11 +50,16 @@ class UserDataScreen extends StatelessWidget {
       BuildContext context, List<UsersStatusModel> usersStatus) {
     return Padding(
       padding: EdgeInsets.all(16.w),
-      child: ListView.builder(
-        itemCount: usersStatus.length,
-        itemBuilder: (context, index) {
-          return _buildUserCard(context, usersStatus[index], index);
+      child: RefreshIndicator(
+        onRefresh: () async {
+          context.read<NetworksCubit>().getUsersStatus();
         },
+        child: ListView.builder(
+          itemCount: usersStatus.length,
+          itemBuilder: (context, index) {
+            return _buildUserCard(context, usersStatus[index], index);
+          },
+        ),
       ),
     );
   }
@@ -216,7 +221,7 @@ class UserDataScreen extends StatelessWidget {
             color: AppColors.primaryText,
           ),
         ),
-        initiallyExpanded: cubit.isExpandedList[index],
+        // initiallyExpanded: cubit.isExpandedList[index],
         children: [
           _buildStatusRow("الايام حتى الانتهاء", data.chargedTime ?? '----'),
           Padding(

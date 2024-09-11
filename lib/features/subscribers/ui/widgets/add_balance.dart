@@ -9,7 +9,7 @@ import 'package:flutter/scheduler.dart';
 
 class AddBalanceScreen extends StatefulWidget {
   const AddBalanceScreen({super.key, required this.subscriber});
-  final SubscribersModel subscriber;
+  final DataModel subscriber;
 
   @override
   State<AddBalanceScreen> createState() => _AddBalanceScreenState();

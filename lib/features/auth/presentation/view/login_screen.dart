@@ -81,7 +81,7 @@ class LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           controller: userNameController,
                           decoration: InputDecoration(
-                            labelText: 'User Name',
+                            labelText: 'اسم المستخدم',
                             labelStyle:
                             const TextStyle(color: AppColors.placeholderText),
                             border: OutlineInputBorder(
@@ -98,7 +98,7 @@ class LoginScreenState extends State<LoginScreen> {
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your user name';
+                              return 'من فضلك ادخل اسم المستخدم';
                             }
                             return null;
                           },
@@ -108,7 +108,7 @@ class LoginScreenState extends State<LoginScreen> {
                           controller: passwordController,
                           obscureText: true,
                           decoration: InputDecoration(
-                            labelText: 'Password',
+                            labelText: 'كلمه السر',
                             labelStyle:
                             const TextStyle(color: AppColors.placeholderText),
                             border: OutlineInputBorder(
@@ -124,7 +124,7 @@ class LoginScreenState extends State<LoginScreen> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
+                              return 'من فضلك ادخل كلمه السر';
                             }
                             return null;
                           },
@@ -147,7 +147,7 @@ class LoginScreenState extends State<LoginScreen> {
                           },
                           backgroundColor: AppColors.primary,
                           child: Text(
-                            'Login',
+                            'تسجيل الدخول',
                             style: TextStyle(fontSize: 16.sp),
                           ),
                         ),

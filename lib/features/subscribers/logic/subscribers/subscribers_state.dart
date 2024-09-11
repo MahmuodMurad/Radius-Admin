@@ -61,6 +61,15 @@ class DeleteSubscribersFailure extends SubscribersState {
 
   DeleteSubscribersFailure({required this.error});
 }
+class ReseteSubscriptionSubscribersLoading extends SubscribersState {}
+
+class ReseteSubscriptionSubscribersSuccess extends SubscribersState {}
+
+class ReseteSubscriptionSubscribersFailure extends SubscribersState {
+  final String error;
+
+  ReseteSubscriptionSubscribersFailure({required this.error});
+}
 class RenewSubscribersLoading extends SubscribersState {}
 
 class RenewSubscribersSuccess extends SubscribersState {}
@@ -83,14 +92,14 @@ class AddSubscribersFailure extends SubscribersState {
 
   AddSubscribersFailure({required this.error});
 }
-class GetCustomerFinancialStatusLoading extends SubscribersState {}
+class GetCustomerFinanciallStatusLoading extends SubscribersState {}
 
-class GetCustomerFinancialStatusSuccess extends SubscribersState {}
+class GetCustomerFinanciallStatusSuccess extends SubscribersState {}
 
-class GetCustomerFinancialStatusFailure extends SubscribersState {
+class GetCustomerFinanciallStatusFailure extends SubscribersState {
   final String error;
 
-  GetCustomerFinancialStatusFailure({required this.error});
+  GetCustomerFinanciallStatusFailure({required this.error});
 }
 
 class AddBalanceLoading extends SubscribersState {}

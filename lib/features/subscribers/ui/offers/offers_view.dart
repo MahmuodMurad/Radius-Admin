@@ -43,6 +43,9 @@ class ServicesListScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final service = cubit.offers[index];
                 return ServiceCard(
+                  deleteService: () {
+                    cubit.deleteOffer(id: service.id!, context: context);
+                  },
                   status: service.enableStatus!,
                   createdOn: service.createdOn!,
                   price: service.srvPrice!,

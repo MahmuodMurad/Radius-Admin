@@ -62,11 +62,16 @@ class _UserCreditListState extends State<UserCreditList> {
               backgroundColor: AppColors.secondary,
             ),
             backgroundColor: AppColors.secondaryBackground,
-            body: ListView.builder(
-              itemCount: cubit.customerFinancialStatus.length,
-              itemBuilder: (context, index) {
-                return _buildUserCreditCard(cubit.customerFinancialStatus[index], index, cubit);
+            body: RefreshIndicator(
+              onRefresh: () async {
+                cubit.getCustomerFinancialStatus();
               },
+              child: ListView.builder(
+                itemCount: cubit.customerFinancialStatus.length,
+                itemBuilder: (context, index) {
+                  return _buildUserCreditCard(cubit.customerFinancialStatus[index], index, cubit);
+                },
+              ),
             ),
           );
 
