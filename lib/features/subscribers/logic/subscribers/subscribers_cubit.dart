@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
+import 'package:redius_admin/core/cache_helper/local_database.dart';
 import 'package:redius_admin/core/shared_widgets/toast.dart';
 import 'package:redius_admin/features/subscribers/data/models/customer_financial_status_model.dart';
 import 'package:redius_admin/features/subscribers/data/models/server_group_model.dart';
@@ -47,10 +48,12 @@ class SubscribersCubit extends Cubit<SubscribersState> {
   }
 
   Future<void> getSubscribers() async {
+
     emit(AllSubscribersLoading());
     try {
       final response = await _subscribersRepo.getSubscribers();
       allSubscribers = response;
+      allSubscribers.isNotEmpty ? LocalDatabase.setSecuredString("adminTopic", allSubscribers[1].createdBy!):LocalDatabase.setSecuredString("adminTopic", "admin");
       emit(AllSubscribersSuccess());
     } catch (e) {
       print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$e");
