@@ -8,6 +8,8 @@ import 'package:redius_admin/core/utils/app_constraints.dart';
 import 'package:redius_admin/features/auth/presentation/view/login_screen.dart';
 import 'package:redius_admin/features/subscribers/logic/Networks/networks_cubit.dart';
 import 'package:redius_admin/features/subscribers/logic/Networks/networks_state.dart';
+import 'package:redius_admin/features/subscribers/logic/subscribers/subscribers_cubit.dart';
+import 'package:redius_admin/features/subscribers/logic/subscribers/subscribers_state.dart';
 import 'package:redius_admin/features/subscribers/ui/add_new_subscriber.dart';
 import 'package:redius_admin/features/subscribers/ui/all_subscribers_view.dart';
 import 'package:redius_admin/features/subscribers/ui/broadband_subscribers.dart';
@@ -22,9 +24,9 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NetworksCubit, NetworksState>(
+    return BlocBuilder<SubscribersCubit, SubscribersState>(
       builder: (context, state) {
-        NetworksCubit cubit = BlocProvider.of<NetworksCubit>(context);
+        SubscribersCubit cubit = BlocProvider.of<SubscribersCubit>(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -36,7 +38,8 @@ class AppDrawer extends StatelessWidget {
             child: Column(
               children: [
                  Text(
-                  'مرحبا ${cubit.networkUsaing.networkName}',
+                   cubit.allSubscribers.isEmpty ? '' :
+                  'مرحبا ${cubit.allSubscribers[0].createdBy}',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24.sp,

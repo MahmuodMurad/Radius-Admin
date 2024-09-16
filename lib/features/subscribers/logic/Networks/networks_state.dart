@@ -23,10 +23,11 @@ class GetUsersStatusFailure extends NetworksState {
 class GetNetworkUsaingLoading extends NetworksState {}
 
 class GetNetworkUsaingSuccess extends NetworksState {
-  final NetworkUsaingModel networkUsaing;
+  final List<NetworkUsaingModel> networkUsaingList;
 
-  GetNetworkUsaingSuccess({required this.networkUsaing});
+  GetNetworkUsaingSuccess({required this.networkUsaingList});
 }
+
 
 class GetNetworkUsaingFailure extends NetworksState {
   final String error;

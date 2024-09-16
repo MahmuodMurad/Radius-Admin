@@ -21,15 +21,16 @@ class NetworksRepo {
     }
   }
 
-  Future<NetworkUsaingModel> getNetworkUsaing() async {
+  Future<List<NetworkUsaingModel>> getNetworkUsaing() async {
     try {
       final response = await api.get(EndPoint.networkUsaing);
-      return NetworkUsaingModel.fromJson(response);
+      return (response as List).map((e) => NetworkUsaingModel.fromJson(e)).toList();
     } on ServerExceptions catch (e) {
       print('Error fetching network usage: $e');
       rethrow;
     }
   }
+
 
   Future<List<CustomerFinancialStatusModel>> getCustomerFinancialStatus() async {
     try {

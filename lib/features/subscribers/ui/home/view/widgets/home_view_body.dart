@@ -31,7 +31,8 @@ class HomeViewBody extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: AppColors.secondary,
             title:  Text(
-                      "مرحبا بك : ${cubit.networkUsaing.networkName}",
+              Scubit.allSubscribers.isEmpty ? '' :
+                      "مرحبا بك : ${Scubit.allSubscribers[0].createdBy}",
                       style: TextStyle(
                         color: AppColors.primaryText,
                         fontWeight: FontWeight.bold,

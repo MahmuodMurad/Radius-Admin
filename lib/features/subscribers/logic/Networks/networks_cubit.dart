@@ -16,7 +16,8 @@ class NetworksCubit extends Cubit<NetworksState> {
 
   List<UsersStatusModel> usersStatus = [];
   List<CustomerFinancialStatusModel> customerFinancialStatus = [];
-  NetworkUsaingModel networkUsaing = NetworkUsaingModel();
+  List<NetworkUsaingModel> networkUsaingList = []; // Store list of network usage data
+
   List<bool> isExpandedList = [];
 
   void expandList(int index) {
@@ -35,16 +36,20 @@ class NetworksCubit extends Cubit<NetworksState> {
     }
   }
 
+
   Future<void> getNetworkUsaing() async {
     emit(GetNetworkUsaingLoading());
     try {
       final response = await networksRepo.getNetworkUsaing();
-      networkUsaing = response;
-      emit(GetNetworkUsaingSuccess(networkUsaing: networkUsaing));
+      print("API Response: ${response}");
+      networkUsaingList = response; // Ensure this is a list
+      emit(GetNetworkUsaingSuccess(networkUsaingList: networkUsaingList));
     } catch (e) {
+      print("API Error: $e");
       emit(GetNetworkUsaingFailure(error: e.toString()));
     }
   }
+
 
   Future<void> getCustomerFinancialStatus() async {
     emit(GetCustomerFinancialStatusLoading());
